@@ -1,0 +1,59 @@
+import RPi.GPIO as GPIO
+import time
+from hx711 import HX711  # HX711 library for the load cell
+
+# Pin definitions (adjust these based on your wiring)
+DT_PIN = 5   # Data pin for HX711
+SCK_PIN = 6  # Clock pin for HX711
+
+# Initialize HX711
+hx = HX711(DT_PIN, SCK_PIN)
+
+# Calibration factor (you'll need to calibrate this for your specific scale)
+CALIBRATION_FACTOR = 430  # Adjust this based on calibration
+
+def setup_scale():
+    # Set GPIO mode
+    GPIO.setmode(GPIO.BCM)
+    
+    # Reset HX711
+    hx.reset()
+    # Set reference unit for calibration
+    hx.set_reference_unit(CALIBRATION_FACTOR)
+    # Tare the scale (zero it out)
+    hx.tare()
+    print("Scale initialized. Place object to weigh.")
+
+def read_weight():
+    try:
+        # Get weight (average of 10 readings for stability)
+        weight = hx.get_weight(10)
+        # Round to 2 decimal places
+        weight = round(weight, 2)
+        
+        # Ensure no negative values (small fluctuations can occur)
+        if weight < 0:
+            weight = 0.0
+            
+        return weight
+    except Exception as e:
+        print(f"Error reading weight: {e}")
+        return 0.0
+
+def main():
+    setup_scale()
+    
+    try:
+        while True:
+            weight = read_weight()
+            print(f"Weight: {weight} grams")
+            time.sleep(1)  # Update every second
+            
+    except KeyboardInterrupt:
+        print("\nProgram terminated by user.")
+    finally:
+        GPIO.cleanup()
+        print("GPIO cleaned up.")
+
+if __name__ == "__main__":
+    main()
