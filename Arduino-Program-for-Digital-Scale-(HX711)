@@ -1,0 +1,50 @@
+#include <HX711.h>
+
+// Pin definitions
+#define DOUT  3  // Data pin for HX711
+#define CLK   2  // Clock pin for HX711
+
+HX711 scale;
+float calibration_factor = -7050.0; // Adjust this value based on calibration
+float weight;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Digital Scale with HX711");
+  scale.begin(DOUT, CLK);
+  
+  // Initialize scale
+  scale.set_scale();
+  scale.tare(); // Reset scale to 0
+  Serial.println("Place known weight on scale for calibration or press 't' to tare.");
+}
+
+void loop() {
+  // Read weight
+  scale.set_scale(calibration_factor);
+  weight = scale.get_units(10); // Average of 10 readings
+  
+  // Display weight
+  Serial.print("Weight: ");
+  Serial.print(weight, 2); // 2 decimal places
+  Serial.println(" kg");
+
+  // Check for serial input for tare or calibration adjustment
+  if (Serial.available()) {
+    char input = Serial.read();
+    if (input == 't') {
+      scale.tare();
+      Serial.println("Scale tared.");
+    } else if (input == '+' || input == '=') {
+      calibration_factor += 10;
+      Serial.print("New calibration factor: ");
+      Serial.println(calibration_factor);
+    } else if (input == '-' || input == '_') {
+      calibration_factor -= 10;
+      Serial.print("New calibration factor: ");
+      Serial.println(calibration_factor);
+    }
+  }
+  
+  delay(500); // Update every 0.5 seconds
+}
