@@ -1,0 +1,13 @@
+
+def main():
+    setup_scale()
+    
+    try:
+        while True:
+            weight = read_weight()
+            print(f"Weight: {weight} grams")
+            time.sleep(1)  # Update every second
+            
+    except KeyboardInterrupt:
+        print("\nProgram terminated by user.")
+    finally:
