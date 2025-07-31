@@ -40,18 +40,6 @@ def read_weight():
         print(f"Error reading weight: {e}")
         return 0.0
 
-def main():
-    setup_scale()
-    
-    try:
-        while True:
-            weight = read_weight()
-            print(f"Weight: {weight} grams")
-            time.sleep(1)  # Update every second
-            
-    except KeyboardInterrupt:
-        print("\nProgram terminated by user.")
-    finally:
         GPIO.cleanup()
         print("GPIO cleaned up.")
 
