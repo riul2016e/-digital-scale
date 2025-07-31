@@ -1,0 +1,15 @@
+  def export_to_csv(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT id, timestamp, weight, unit, category FROM measurements")
+        with open("scale_measurements.csv", "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["ID", "Timestamp", "Weight", "Unit", "Category"])
+            for row in cursor.fetchall():
+                weight = row[2] if row[3] == "kg" else row[2] * 2.20462
+                writer.writerow([row[0], row[1], f"{weight:.2f}", row[3], row[4]])
+        messagebox.showinfo("Success", "Measurements exported to scale_measurements.csv!")
+        self.visual_feedback(success=True)
+        self.play_sound()
+
+    def __del__(self):
+        self.conn.close()
