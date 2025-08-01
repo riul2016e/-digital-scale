@@ -24,21 +24,7 @@ def setup_scale():
     hx.tare()
     print("Scale initialized. Place object to weigh.")
 
-def read_weight():
-    try:
-        # Get weight (average of 10 readings for stability)
-        weight = hx.get_weight(10)
-        # Round to 2 decimal places
-        weight = round(weight, 2)
-        
-        # Ensure no negative values (small fluctuations can occur)
-        if weight < 0:
-            weight = 0.0
-            
-        return weight
-    except Exception as e:
-        print(f"Error reading weight: {e}")
-        return 0.0
+
 
         GPIO.cleanup()
         print("GPIO cleaned up.")
