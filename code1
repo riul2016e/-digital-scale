@@ -1,0 +1,19 @@
+ // Check for serial input for tare or calibration adjustment
+  if (Serial.available()) {
+    char input = Serial.read();
+    if (input == 't') {
+      scale.tare();
+      Serial.println("Scale tared.");
+    } else if (input == '+' || input == '=') {
+      calibration_factor += 10;
+      Serial.print("New calibration factor: ");
+      Serial.println(calibration_factor);
+    } else if (input == '-' || input == '_') {
+      calibration_factor -= 10;
+      Serial.print("New calibration factor: ");
+      Serial.println(calibration_factor);
+    }
+  }
+  
+  delay(500); // Update every 0.5 seconds
+}
