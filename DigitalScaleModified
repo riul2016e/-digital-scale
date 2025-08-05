@@ -188,7 +188,3 @@ class DigitalScaleApp:
 
   
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = DigitalScaleApp(root)
-    root.mainloop()
