@@ -26,8 +26,3 @@ def setup_scale():
 
 
 
-        GPIO.cleanup()
-        print("GPIO cleaned up.")
-
-if __name__ == "__main__":
-    main()
